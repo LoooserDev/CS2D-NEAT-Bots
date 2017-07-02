@@ -1,5 +1,52 @@
 # CS2D-NEAT-Bots
-Machine Learning for the 2D online shooter CS2D
+Some weeks ago I stumbled upon a youtube video by SethBling where a computer program "learns" how to play a level in Super Mario World. In this video he explains how he uses a process called neuroevolution to make the program finish the level. 
+
+So I started asking myself if I could write a program that "learns" how to play cs2d. 
+
+I took the code from SethBling and rewrote it so I could use it on cs2d bots. He was using NEAT (neuroevolution of augmenting topologies).
+
+Before I continue, I recommend you to watch his video, where he also explains how it works:
+https://www.youtube.com/watch?v=qv6UVOQ0F44
+
+# How it works:
+NEAT basically generates a fixed number of neural networks. 
+
+Neural networks are working similar to our brain. They get Inputs (information) and calculate Outputs (e.g. cs2d controls) based on the structure of the neural network.
+
+All those generated neural networks get tested and rated with a fitness value based on how good they did on the given task (e.g killing enemies). When all neural networks have been tested the best with the highest fitness value get selected and a new generation of mutated neural networks gets generated. This new generation gets tested again -> best get selected -> new generation and so on...
+
+Each generation the neural networks (should) get better.
+
+# Implementation:
+When I finished rewriting the code I realized that it would be highly unrealistic to make bots fully controlled by neural nets. 
+Especially pathfinding is far to complex. So I decided to start with the enemy engage section of the bot code (when the bot has to fight an enemy).
+
+Currently the neural network has the following inputs:
+1 - Can I hit an enemy? Freeline and Angle (0 to 1 | no to yes)
+2 - Nearest target angle (-1 to 1 | left to right)
+3 - Target Distance (0 to 1 | near to far)
+4 - Angle the enemy is aiming at relative me (-1 to 1 | left to right) 
+
+The neural network can give the following outputs:
+1 - Intelligent Attack! (if output > 0.5)
+2 - Rotate (-1 to 1 | left to right)
+3 - Change aim distance (0 to 1 | near to far)
+4 - move X relative to target. (-1 to 1 | left to right) 
+5 - move Y relative to target. (-1 to 1 | go away to get closer)
+
+fitness evaluation:
+Every time a bot takes longer than 200 frames to engage(timeout) or the bot respawns (bot has most likely died) the neural network gets evaluated and the next neural network gets tested.
+
+fitness value is calculated with:
+1 - Number of times the bot fires the right direction.
+2 - Number of Scores / Kills
+3 - Engagement time
+4 - How close the bot was on aiming in the right direction
+
+Here a video of a training process:
+https://youtu.be/dk3VvSt6DXs 
+
+I also implemented a save an load functionality so that you don’t have to restart training every time the server gets restarted. It creates a save file after each generation. 
 
 # What has Changed?
 - Added neat.lua in includes. This is an easy to use NEAT library.
