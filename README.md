@@ -57,3 +57,15 @@ I also implemented a save an load functionality so that you don’t have to rest
 Download the files and save them into your cs2d bot folder. 
 
 There is already a save file called savefile.sf with trained bots. If you want them to start learning to fight from scratch, simply delete this file.
+
+# How to use neat.lua?
+With neat.lua you can run as many neuroevolution parallel as you want. All data gets stored in one object.
+
+
+```lua
+--load neat.lua
+dofile("bots/includes/neat.lua")
+
+--initialize a neuroevolution
+myNeat = fai_neat_init(4,5) -- neural nets will have 4 inputs and 5 outputs
+```
