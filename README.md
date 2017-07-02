@@ -68,4 +68,23 @@ dofile("bots/includes/neat.lua")
 
 --initialize a neuroevolution
 myNeat = fai_neat_init(4,5) -- neural nets will have 4 inputs and 5 outputs
+
+--optionally load saved evolution progress
+fai_neat_load(myNeat, "bots/savefile.sf")
+
+--prepare inputs
+local inputs = {}
+inputs[1] = lineOnTarget
+inputs[2] = nearTargetDirection
+inputs[3] = targetDistance
+inputs[4] = enemyOffAngle
+
+--evaluate a network to get outputs
+local outputs = {}
+outputs = fai_neat_evaluate(myNeat, 1, inputs) -- if you want to evaluate multiple neural nets at the same time, give each evaluation a unique number instead of 1
+
+--if evaluation is finished -> rate neural net
+local fitness = 100
+fai_neat_rate(myNeat, 1, fitness) --calculate a fitness based on how well the neural net has done
+-- neat rate automatically selects the next neural net after the old one has been rated
 ```
